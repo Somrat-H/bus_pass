@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,7 @@ class CopyPage extends StatelessWidget{
       body: Column(
         children: [
           const SizedBox(
-          height: 170,
+          height: 200,
           ),
           Column(
             children: const [
@@ -32,21 +31,35 @@ class CopyPage extends StatelessWidget{
           ),
           Column(
             children: const [
-              
-              Center(
-                child: Text('You need to give permission to record audio for voice typing. You can enable this permission from system settings.'),
+              Padding(padding: EdgeInsets.all(8),
+              child: Center(
+                child: Text('You need to give permission to record audio for voice typing. You can enable this permission from system settings.',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+                ),
+              )
               )
             ],
+          ),
+          const SizedBox(
+            height: 150,
           ),
           Column(
             children: [
               Center(
-                
-                child: 
-                ElevatedButton(
+                child: SizedBox(
+                  height: 60,
+                  width: 390,
+                  
+               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600),
                   onPressed: (){},
-                  child: const Text('Go to system settings'), ),
+                  child: const Text('Go to system settings'), 
+                  ),
+                ),
               )
             ],
           )
