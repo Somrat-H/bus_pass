@@ -61,9 +61,9 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     height: 65,
                     width: 300,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green.shade600),
+                    child: (
+                       MaterialButton(
+                        color: Colors.green.shade600,
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -72,8 +72,9 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: const Text(
                           'Next Page',
-                        )),
+                        ))
                   ),
+                ),
                 ),
               ],
             )
