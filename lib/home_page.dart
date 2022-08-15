@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CopyPage()));
+                                  builder: (context) => const CopyPage()));
                         },
                         child: const Text(
                           'Next Page',
