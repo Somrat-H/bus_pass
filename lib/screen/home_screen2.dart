@@ -8,14 +8,17 @@ class HomeScreen2 extends StatefulWidget {
 }
 
 class _HomeScreen2State extends State<HomeScreen2> {
-  final String title = 'Online Bus Ticket Booking System';
+  final String t = 'Online Bus Ticket Booking System';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(),
+      ),
       appBar: AppBar(
+        
         title: const Center(
-          child: Text(
-             'alkjdfalk',
+          child:  Text('Ticket Booking',
             style: TextStyle(
               fontSize: 15,
 

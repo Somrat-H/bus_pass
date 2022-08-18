@@ -1,5 +1,6 @@
 import 'package:bus_pass/screen/home_screen2.dart';
 import 'package:bus_pass/screen/login.dart';
+import 'package:bus_pass/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,9 +17,15 @@ class MyApp extends StatefulWidget{
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context){
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: true,
-      home: LogIn(),
+      initialRoute: "/",
+      routes: {
+        "/":(context) => const HomeScreen2(),
+        MyRoutes.homeRoutes:(context) => const HomeScreen2(),
+        MyRoutes.loginRoutes:(context) => const LogIn(),
+      },
+
     );
   }
 }
