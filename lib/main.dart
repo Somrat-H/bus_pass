@@ -1,6 +1,7 @@
+import 'package:bus_pass/screen/home_screen2.dart';
+import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,8 +17,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context){
     return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      debugShowCheckedModeBanner: true,
+      home: LogIn(),
     );
   }
 }
