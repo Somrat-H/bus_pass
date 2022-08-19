@@ -65,6 +65,7 @@ class _LogInState extends State<LogIn> {
                     if(value!.isEmpty){
                       return "Username can't be empty";
                     }
+                    return  null;
                   },
 
                 ),
@@ -84,6 +85,7 @@ class _LogInState extends State<LogIn> {
                     else if(value.length < 8){
                       return "Password shuld be 8";
                     }
+                    return null;
                   },
                 ),
               ],
