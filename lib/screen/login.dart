@@ -1,21 +1,33 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:bus_pass/screen/home_screen2.dart';
+import 'package:bus_pass/screen/register.dart';
 import 'package:bus_pass/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+  String?t1, t2;
+  LogIn({super.key, this.t1, this.t2});
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<LogIn> createState() => LogInState();
 }
 
-class _LogInState extends State<LogIn> {
-  String user = '';
+class LogInState extends State<LogIn> {
+
+
+  String username = '';
+  String password = '';
+  // String t1, t2;
   final textcon = TextEditingController();
+  final textcon2 = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+  
+  
 
  moveTohome(BuildContext context){
-  if(_formkey.currentState!.validate()){
-      Navigator.pushNamed(context, MyRoutes.homeRoutes);
+  if(_formkey.currentState!.validate() && widget.t1 == username && widget.t2 == password){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeScreen2()));
   }
  }
  
@@ -27,7 +39,7 @@ class _LogInState extends State<LogIn> {
        body: 
       SingleChildScrollView(
         physics: const ScrollPhysics(),
-       child: Column(
+        child: Column(
         children: [
           Image.asset(
             "assets/login.png",
@@ -51,16 +63,15 @@ class _LogInState extends State<LogIn> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0 , vertical: 8.0),
             child: Form(
               key: _formkey,
-
               child:
             Column(
               children: [
                 TextFormField(
-                 
                     controller: textcon,
                   decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.person),
                       hintText: 'Enter Your Username', labelText: 'Username'),
+                    
                        validator: (value){
                     if(value!.isEmpty){
                       return "Username can't be empty";
@@ -70,10 +81,10 @@ class _LogInState extends State<LogIn> {
 
                 ),
                 TextFormField(
-                
+                  controller: textcon2,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    suffixIcon: Icon(Icons.lock),
+                    suffixIcon: Icon(Icons.key),
                     // icon: Icon(Icons.lock, ),
                       hintText: 'Enter Your Password', labelText: 'Password',
                       
@@ -108,6 +119,10 @@ class _LogInState extends State<LogIn> {
                     ),
                   
                   onPressed: () {
+                    setState(() {
+                      username = textcon.text;
+                      password = textcon2.text;
+                    });
                    moveTohome(context);
                   },
                   child: const Text('Log In'),
@@ -117,16 +132,19 @@ class _LogInState extends State<LogIn> {
           ),
           const SizedBox(
             height: 100,
-            
+         
           ),
+          
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 TextButton(
-                  onPressed: () {}, child: Text('Forgot Password')),
-                const SizedBox(width: 152,),
-                TextButton(onPressed: () {}, child: Text(user)),
+                  onPressed: () {}, child: const Text('Forgot Password')),
+                const SizedBox(width: 150,),
+                TextButton(onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Register()));
+                }, child: const Text('Register')),
                 
               ],
             ),

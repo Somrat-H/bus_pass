@@ -1,6 +1,8 @@
+import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen2 extends StatefulWidget {
+  
   const HomeScreen2({super.key});
 
   @override
@@ -9,6 +11,7 @@ class HomeScreen2 extends StatefulWidget {
 
 class _HomeScreen2State extends State<HomeScreen2> {
   final String t = 'Online Bus Ticket Booking System';
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +29,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
           ),
         ),
       ),
+      body: const Text(''),
     );
   }
 }
