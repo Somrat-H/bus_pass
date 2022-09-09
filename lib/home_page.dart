@@ -38,48 +38,37 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Column(
           children: [
-            Center(
-              child: Column(
-                children: [
-                  IconButton(
-                    icon: Icon(iconBool ? iconLight : iconDark),
+            IconButton(
+              icon: Icon(iconBool ? iconLight : iconDark),
+              onPressed: () {
+                setState(() {
+                  iconBool = !iconBool;
+                });
+              },
+            ),
+            Expanded(
+              child: Center(
+                child: SizedBox(
+                  height: 65,
+                  width: 300,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green.shade600),
                     onPressed: () {
-                      setState(() {
-                        iconBool = !iconBool;
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CopyPage(),
+                        ),
+                      );
                     },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 250,
-            ),
-            Column(
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: 65,
-                    width: 300,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.green.shade600),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CopyPage(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Next Page',
-                      ),
+                    child: const Text(
+                      'Next Page',
                     ),
                   ),
                 ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
       ),
