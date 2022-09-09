@@ -18,31 +18,51 @@ class Database {
     return userJson.isNull ? null : User.fromJson(jsonDecode(userJson!));
   }
 
-  Future<bool> login({required String userName, required String password}) {
-    assert(userName.isNotEmpty, 'name can\'t be empty');
-    assert(password.isNotEmpty, 'id can\'t be empty');
-    return _preferences.setString('user', jsonEncode(User(userName, password)));
+  bool get userLoginStatus => _preferences.getBool('status') ?? false;
+
+  Future<bool> setUserLoginStatus(bool status) {
+    return _preferences.setBool('status', status);
   }
 
-  Future<bool> logout() {
+  Future<bool> addUser({
+    required String username,
+    required String password,
+    required String fullName,
+  }) {
+    assert(username.isNotEmpty, 'name can\'t be empty');
+    assert(password.isNotEmpty, 'id can\'t be empty');
+    return _preferences.setString(
+      'user',
+      jsonEncode(User(username, password, fullName)),
+    );
+  }
+
+  Future<bool> deleteUser() {
     return _preferences.remove('user');
   }
 }
 
 class User {
-  String userName;
+  String name;
+  String username;
   String password;
 
-  User([this.userName = '', this.password = '']);
+  User(this.username, this.password, this.name);
 
   User.fromJson(Map<String, dynamic> json)
-      : userName = json['userName'],
-        password = json['password'];
+      : username = json['username'],
+        password = json['password'],
+        name = json['name'];
 
   Map<String, dynamic> toJson() => {
-        'userName': userName,
+        'username': username,
         'password': password,
+        'name': name,
       };
+
+  bool validate(String username, String password) {
+    return username == this.username && password == this.password;
+  }
 }
 
 extension NullCheck on dynamic {

@@ -1,20 +1,31 @@
-import 'package:bus_pass/screen/login.dart';
+import 'package:bus_pass/database.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  
-  const Register({super.key,});
-  
+  const Register({
+    super.key,
+  });
+
   @override
   State<Register> createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-  String username = 'abs';
-  String password = '12345678';
+  final fullNameController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  final nameCon = TextEditingController();
-  final passCon = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,61 +37,109 @@ class _RegisterState extends State<Register> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
-          }, icon: const Icon(Icons.arrow_back_ios, color: Colors.black,),
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0 , vertical: 8.0),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: fullNameController,
+                  decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.person),
-                      hintText: 'Enter Your Full Name', labelText: 'Full Name'),
+                    hintText: 'Enter Your Full Name',
+                    labelText: 'Full Name',
                   ),
-                  TextFormField(
-                    controller: nameCon,
-                    decoration: const InputDecoration(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Need a full name!';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.person),
-                      hintText: 'Enter Yoiur Username', labelText: 'Username'),
+                    hintText: 'Enter Yoiur Username',
+                    labelText: 'Username',
                   ),
-                  TextFormField(
-                    controller: passCon,
-                    decoration: const InputDecoration(
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length < 6) {
+                      return 'Need at least 6 character username!';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.key_rounded),
-                      hintText: 'Enter Your Password', labelText: 'Password'),
+                    hintText: 'Enter Your Password',
+                    labelText: 'Password',
                   ),
-                  TextFormField(
-                      decoration: const InputDecoration(
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length < 6) {
+                      return 'Need at least 6 character password!';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.key_rounded),
-                      hintText: 'Re-Enter Your Password', labelText: 'Password'),
+                    hintText: 'Re-Enter Your Password',
+                    labelText: 'Password',
                   ),
-                  const SizedBox(height: 20,),
-
-                  MaterialButton(
-                    color: Colors.blue,
-                    onPressed: (){
-                      setState(() {
-                        username = nameCon.text;
-                        password = passCon.text;
-                      });
-                      Navigator.push(context, MaterialPageRoute(builder:
-                       (context)=> LogIn(t1: nameCon.text, t2: passCon.text,)));
-                    },
-                    child: const Text('Register'),
-                  ),
-                  
-                ],
-              )
-            ],
+                  validator: (value) {
+                    if (value != passwordController.text) {
+                      return 'password didn\'t matched!';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                MaterialButton(
+                  color: Colors.blue,
+                  onPressed: () async {
+                    var messanger = ScaffoldMessenger.of(context);
+                    var navigator = Navigator.of(context);
+                    if (formKey.currentState!.validate()) {
+                      await Database.instance.addUser(
+                        username: usernameController.text,
+                        password: passwordController.text,
+                        fullName: fullNameController.text,
+                      );
+                    messanger.showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'User registerd. You can login now.',
+                        ),
+                      ),
+                    );
+                    navigator.pop();
+                    }
+                  },
+                  child: const Text('Register'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      
-    
     );
   }
 }

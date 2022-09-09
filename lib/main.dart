@@ -1,29 +1,27 @@
+import 'package:bus_pass/database.dart';
+import 'package:bus_pass/screen/home_screen2.dart';
 import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
 
+Future<void> main() async {
+  await Database.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
-void main() => runApp( const MyApp());
-
-
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context){
-    return   MaterialApp(
-      // theme: ThemeData(
-      //   primaryColor: Colors.red,
-      //     colorSchemeSeed: Colors.red,
-      //     useMaterial3: true,
-      //   ),
-      debugShowCheckedModeBanner: true,
-      home: LogIn(t1: 'mainname', t2: 'mainpass',)
-      // routes: {
-      //   MyRoutes.homeRoutes:(context) =>   const HomeScreen2(),
-      //   MyRoutes.loginRoutes:(context) =>  const LogIn(),
-      //   MyRoutes.registerRoutes:(context) =>  const Register(),
-
-      // },
-
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        colorSchemeSeed: Colors.green,
+        useMaterial3: true,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: Database.instance.userLoginStatus
+          ? const HomeScreen2()
+          : const LogIn(),
     );
   }
 }
