@@ -89,7 +89,8 @@ class _CopyPageState extends State<CopyPage> {
                   width: 390,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade600),
+                      onPrimary: Colors.green.shade600,
+                    ),
                     onPressed: () {},
                     child: const Text('Go to system settings'),
                   ),

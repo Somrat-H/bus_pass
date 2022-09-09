@@ -1,4 +1,3 @@
-import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen2 extends StatefulWidget {

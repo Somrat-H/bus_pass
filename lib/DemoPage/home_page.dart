@@ -62,37 +62,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-<<<<<<< HEAD:lib/home_page.dart
                     child: const Text(
                       'Next Page',
                     ),
-=======
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 250,
-            ),
-            Column(
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: 65,
-                    width: 300,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green.shade600),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CopyPage()));
-                        },
-                        child: const Text(
-                          'Next Page',
-                        )),
->>>>>>> b925fc243c39e169bf31a0822a278b6dec297130:lib/DemoPage/home_page.dart
                   ),
                 ),
               ),
