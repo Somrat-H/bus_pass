@@ -18,28 +18,58 @@ class Database {
     return userJson.isNull ? null : User.fromJson(jsonDecode(userJson!));
   }
 
-  bool get userLoginStatus => _preferences.getBool('status') ?? false;
 
-  Future<bool> setUserLoginStatus(bool status) {
-    return _preferences.setBool('status', status);
+  Future<bool> saveUserLoginStatus({String? username, String? password}) async {
+    if (username == null) {
+      return deleteUser();
+    }
+    var users = usersString.map((e) => User.fromJson(jsonDecode(e))).toList();
+    User? user;
+    try {
+    user = users.firstWhere((element) => element.username == username && element.password == password);
+    } catch(e) {
+      return false;
+    }
+    return _preferences.setString('user', jsonEncode(user));
   }
+
+  List<String> get usersString => _preferences.getStringList('users') ?? [];
 
   Future<bool> addUser({
     required String username,
     required String password,
     required String fullName,
-  }) {
+  }) async {
     assert(username.isNotEmpty, 'name can\'t be empty');
     assert(password.isNotEmpty, 'id can\'t be empty');
-    return _preferences.setString(
-      'user',
-      jsonEncode(User(username, password, fullName)),
-    );
+    var users = usersString.map((e) => User.fromJson(jsonDecode(e))).toList();
+    if (users.any((element) => element.username == username)) {
+      return false;
+    }
+    users.add(User(username, password, fullName));
+    return _preferences.setStringList('users', users.map((e) => jsonEncode(e.toJson())).toList());
   }
 
   Future<bool> deleteUser() {
     return _preferences.remove('user');
   }
+
+  Future<bool> updateTicketNumber(int number) {
+    return _preferences.setInt(user!.username, number);
+  }
+
+  bool isMyTicketNumber(int number) {
+    return _preferences.getInt(user!.username) ?? -1;
+  }
+
+  Future<bool> saveTicketSatus(int ticketNumber, bool booked) async {
+    var busData = bus;
+    busData.tickets[ticketNumber].booked = booked;
+    saveTicketNumber(ticketNumber);
+    return _preferences.setString('bus', busData.toData());
+  }
+
+  Bus get bus => Bus(_preferences.getString('bus'));
 }
 
 class User {
@@ -68,5 +98,35 @@ class User {
 extension NullCheck on dynamic {
   bool get isNull {
     return this == null;
+  }
+}
+
+class Ticket {
+  int seatNumber;
+  bool booked = false;
+  Ticket(this.seatNumber);
+  Ticket.fromJson(Map<String, dynamic> json) :
+  seatNumber = json['seatNumber'],
+  booked = json['booked'];
+  Map<String, dynamic> toJson() => {
+    'seatNumber': seatNumber,
+    'booked': booked,
+  };
+}
+
+class Bus {
+  late List<Ticket> tickets;
+  Bus(String? data){
+    if (data == null) {
+      tickets = List.generate(40, (index) => Ticket(index));
+    } else {
+      tickets = (jsonDecode(data)['tickets'] as List).map((e) => Ticket.fromJson(e)).toList();
+    }
+  }
+
+  String toData() {
+    return jsonEncode({
+      'tickets': tickets.map((e) => e.toJson()).toList(),
+    });
   }
 }

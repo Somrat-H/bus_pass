@@ -102,12 +102,12 @@ class LogInState extends State<LogIn> {
                 minimumSize: const Size(100, 35),
               ),
               onPressed: () async {
-                var user = Database.instance.user;
-                if (user.isNull ||
-                    !user!.validate(
-                      usernameController.text,
-                      passwordController.text,
+                if (await Database.instance.saveUserLoginStatus(
+                  username: usernameController.text,
+                  password: passwordController.text,
                     )) {
+                  redirectUser();
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -116,9 +116,6 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                   );
-                } else {
-                  await Database.instance.setUserLoginStatus(true);
-                  redirectUser();
                 }
               },
               child: const Text('Log In'),

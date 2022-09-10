@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bus_pass/database.dart';
 import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    var tickets = Database.instance.bus.tickets;
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -48,7 +51,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
           TextButton(
             onPressed: () async {
               var navigator = Navigator.of(context);
-              await Database.instance.setUserLoginStatus(false);
+              await Database.instance.saveUserLoginStatus();
               navigator.pushReplacement(
                 MaterialPageRoute(builder: (_) => const LogIn()),
               );
@@ -57,7 +60,60 @@ class _HomeScreen2State extends State<HomeScreen2> {
           ),
         ],
       ),
-      body: const Text(''),
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+        itemCount: tickets.length,
+        itemBuilder: (context, index) => TicketView(ticket: tickets[index]),
+      ),
+    );
+  }
+}
+
+class TicketView extends StatefulWidget {
+  const TicketView({
+    Key? key,
+    required this.ticket,
+  }) : super(key: key);
+
+  final Ticket ticket;
+
+  @override
+  State<TicketView> createState() => _TicketViewState();
+}
+
+class _TicketViewState extends State<TicketView> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        if (widget.ticket.booked) {
+          log('${Database.instance.ticketNumber}||${widget.ticket.seatNumber}');
+          if (Database.instance.ticketNumber == widget.ticket.seatNumber) {
+            // own booked
+            await Database.instance.saveTicketSatus(widget.ticket.seatNumber, false);
+            setState(() {
+              widget.ticket.booked = false;
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('The seat is already booked'),
+              ),
+            );
+          }
+        } else {
+          await Database.instance.saveTicketSatus(widget.ticket.seatNumber, true);
+            setState(() {
+              widget.ticket.booked = true;
+            });
+        }
+      },
+      child: Card(
+          color: widget.ticket.booked? Colors.amber : null,
+          child: Center(
+            child: Text('${widget.ticket.seatNumber}'),
+          ),
+        ),
     );
   }
 }
