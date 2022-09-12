@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bus_pass/database.dart';
 import 'package:bus_pass/screen/login.dart';
 import 'package:flutter/material.dart';
@@ -87,8 +85,7 @@ class _TicketViewState extends State<TicketView> {
     return GestureDetector(
       onTap: () async {
         if (widget.ticket.booked) {
-          log('${Database.instance.ticketNumber}||${widget.ticket.seatNumber}');
-          if (Database.instance.ticketNumber == widget.ticket.seatNumber) {
+          if (Database.instance.isMyTicketNumber(widget.ticket.seatNumber)) {
             // own booked
             await Database.instance.saveTicketSatus(widget.ticket.seatNumber, false);
             setState(() {

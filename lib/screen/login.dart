@@ -105,7 +105,7 @@ class LogInState extends State<LogIn> {
                 if (await Database.instance.saveUserLoginStatus(
                   username: usernameController.text,
                   password: passwordController.text,
-                    )) {
+                )) {
                   redirectUser();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -126,13 +126,11 @@ class LogInState extends State<LogIn> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
                     onPressed: () {},
                     child: const Text('Forgot Password'),
-                  ),
-                  const SizedBox(
-                    width: 150,
                   ),
                   TextButton(
                     onPressed: () {

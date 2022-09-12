@@ -18,7 +18,6 @@ class Database {
     return userJson.isNull ? null : User.fromJson(jsonDecode(userJson!));
   }
 
-
   Future<bool> saveUserLoginStatus({String? username, String? password}) async {
     if (username == null) {
       return deleteUser();
@@ -26,8 +25,9 @@ class Database {
     var users = usersString.map((e) => User.fromJson(jsonDecode(e))).toList();
     User? user;
     try {
-    user = users.firstWhere((element) => element.username == username && element.password == password);
-    } catch(e) {
+      user = users.firstWhere((element) =>
+          element.username == username && element.password == password);
+    } catch (e) {
       return false;
     }
     return _preferences.setString('user', jsonEncode(user));
@@ -47,25 +47,42 @@ class Database {
       return false;
     }
     users.add(User(username, password, fullName));
-    return _preferences.setStringList('users', users.map((e) => jsonEncode(e.toJson())).toList());
+    return _preferences.setStringList(
+        'users', users.map((e) => jsonEncode(e.toJson())).toList());
   }
 
   Future<bool> deleteUser() {
     return _preferences.remove('user');
   }
 
-  Future<bool> updateTicketNumber(int number) {
-    return _preferences.setInt(user!.username, number);
+  Future<bool> updateTicketNumber(int number, bool booked) {
+    var tickets = (_preferences.getStringList(user!.username) ?? [])
+        .map((e) => int.parse(e))
+        .toList();
+    if (booked) {
+      assert(!tickets.contains(number));
+      tickets.add(number);
+    } else {
+      assert(tickets.contains(number));
+      tickets.remove(number);
+    }
+    return _preferences.setStringList(
+      user!.username,
+      tickets.map((e) => '$e').toList(),
+    );
   }
 
   bool isMyTicketNumber(int number) {
-    return _preferences.getInt(user!.username) ?? -1;
+    var tickets = (_preferences.getStringList(user!.username) ?? [])
+        .map((e) => int.parse(e))
+        .toList();
+    return tickets.contains(number);
   }
 
   Future<bool> saveTicketSatus(int ticketNumber, bool booked) async {
     var busData = bus;
     busData.tickets[ticketNumber].booked = booked;
-    saveTicketNumber(ticketNumber);
+    await updateTicketNumber(ticketNumber, booked);
     return _preferences.setString('bus', busData.toData());
   }
 
@@ -105,22 +122,24 @@ class Ticket {
   int seatNumber;
   bool booked = false;
   Ticket(this.seatNumber);
-  Ticket.fromJson(Map<String, dynamic> json) :
-  seatNumber = json['seatNumber'],
-  booked = json['booked'];
+  Ticket.fromJson(Map<String, dynamic> json)
+      : seatNumber = json['seatNumber'],
+        booked = json['booked'];
   Map<String, dynamic> toJson() => {
-    'seatNumber': seatNumber,
-    'booked': booked,
-  };
+        'seatNumber': seatNumber,
+        'booked': booked,
+      };
 }
 
 class Bus {
   late List<Ticket> tickets;
-  Bus(String? data){
+  Bus(String? data) {
     if (data == null) {
       tickets = List.generate(40, (index) => Ticket(index));
     } else {
-      tickets = (jsonDecode(data)['tickets'] as List).map((e) => Ticket.fromJson(e)).toList();
+      tickets = (jsonDecode(data)['tickets'] as List)
+          .map((e) => Ticket.fromJson(e))
+          .toList();
     }
   }
 
