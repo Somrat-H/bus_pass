@@ -13,10 +13,10 @@ Future<void> main() async {
 // sure?
 
 // how can manage all data ?
-// great question. if the data is public then we should use firebase database. 
+// great question. if the data is public then we should use firebase database.
 // here ticket quality price etc are public data. but for now we are gonna use shared preference as data
-// base . since it's local. then later you can implement those easily into firebase. so now try to understand 
-// how shared preference used. it is veruy very important than cloud database. most of the data need to store localy 
+// base . since it's local. then later you can implement those easily into firebase. so now try to understand
+// how shared preference used. it is veruy very important than cloud database. most of the data need to store localy
 // so go on and knock me if don't understand any thing. Okay?
 // yes oky but i say about thi share preference.
 // we can store user data in two types local and cloud? yes. AND most better is local. because it is more secure, faster, and prefered.
@@ -36,9 +36,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: Database.instance.user != null
-          ? const HomeScreen2()
-          : const LogIn(),
+      home:
+          Database.instance.user != null ? const HomeScreen2() : const LogIn(),
     );
   }
 }

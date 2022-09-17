@@ -123,14 +123,14 @@ class _RegisterState extends State<Register> {
                         password: passwordController.text,
                         fullName: fullNameController.text,
                       );
-                    messanger.showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'User registerd. You can login now.',
+                      messanger.showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'User registerd. You can login now.',
+                          ),
                         ),
-                      ),
-                    );
-                    navigator.pop();
+                      );
+                      navigator.pop();
                     }
                   },
                   child: const Text('Register'),

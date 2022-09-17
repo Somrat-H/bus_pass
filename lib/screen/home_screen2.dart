@@ -59,7 +59,8 @@ class _HomeScreen2State extends State<HomeScreen2> {
         ],
       ),
       body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
         itemCount: tickets.length,
         itemBuilder: (context, index) => TicketView(ticket: tickets[index]),
       ),
@@ -87,7 +88,8 @@ class _TicketViewState extends State<TicketView> {
         if (widget.ticket.booked) {
           if (Database.instance.isMyTicketNumber(widget.ticket.seatNumber)) {
             // own booked
-            await Database.instance.saveTicketSatus(widget.ticket.seatNumber, false);
+            await Database.instance
+                .saveTicketSatus(widget.ticket.seatNumber, false);
             setState(() {
               widget.ticket.booked = false;
             });
@@ -99,18 +101,23 @@ class _TicketViewState extends State<TicketView> {
             );
           }
         } else {
-          await Database.instance.saveTicketSatus(widget.ticket.seatNumber, true);
-            setState(() {
-              widget.ticket.booked = true;
-            });
+          await Database.instance
+              .saveTicketSatus(widget.ticket.seatNumber, true);
+          setState(() {
+            widget.ticket.booked = true;
+          });
         }
       },
       child: Card(
-          color: widget.ticket.booked? Colors.amber : null,
-          child: Center(
-            child: Text('${widget.ticket.seatNumber}'),
-          ),
+        color: Database.instance.isMyTicketNumber(widget.ticket.seatNumber)
+            ? Colors.blue.shade300
+            : widget.ticket.booked
+                ? Colors.amber
+                : null,
+        child: Center(
+          child: Text('${widget.ticket.seatNumber}'),
         ),
+      ),
     );
   }
 }
