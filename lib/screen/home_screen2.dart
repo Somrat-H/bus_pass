@@ -38,7 +38,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
         ),
       ),
       appBar: AppBar(
-        centerTitle: true,
+        //centerTitle: true,
         title: const Text(
           'Ticket Booking',
           style: TextStyle(
